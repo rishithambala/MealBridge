@@ -1,7 +1,44 @@
 import { Link } from "react-router-dom"
+import { useEffect, useState } from "react"
+import axios from "axios"
+
+import API_URL from "../config/api"
 
 const Hero = () => {
+
+  const [stats, setStats] = useState({
+    donations: 0,
+    donors: 0,
+    volunteers: 0,
+    ngos: 0,
+  })
+
+  useEffect(() => {
+
+    const fetchStats = async () => {
+
+      try {
+
+        const { data } = await axios.get(
+          `${API_URL}/api/auth/stats`
+        )
+
+        setStats(data)
+
+      } catch (error) {
+
+        console.log(error)
+
+      }
+
+    }
+
+    fetchStats()
+
+  }, [])
+
   return (
+
     <section className="min-h-[90vh] flex flex-col justify-center items-center text-center px-6 bg-gradient-to-br from-green-50 via-white to-green-100">
 
       <div className="max-w-5xl">
@@ -58,19 +95,7 @@ const Hero = () => {
           <div className="bg-white rounded-2xl shadow-md p-6">
 
             <h3 className="text-3xl font-bold text-green-600">
-              500+
-            </h3>
-
-            <p className="text-gray-600 mt-2">
-              Meals Donated
-            </p>
-
-          </div>
-
-          <div className="bg-white rounded-2xl shadow-md p-6">
-
-            <h3 className="text-3xl font-bold text-green-600">
-              100+
+              {stats.donations}
             </h3>
 
             <p className="text-gray-600 mt-2">
@@ -82,7 +107,19 @@ const Hero = () => {
           <div className="bg-white rounded-2xl shadow-md p-6">
 
             <h3 className="text-3xl font-bold text-green-600">
-              25+
+              {stats.donors}
+            </h3>
+
+            <p className="text-gray-600 mt-2">
+              Donors
+            </p>
+
+          </div>
+
+          <div className="bg-white rounded-2xl shadow-md p-6">
+
+            <h3 className="text-3xl font-bold text-green-600">
+              {stats.volunteers}
             </h3>
 
             <p className="text-gray-600 mt-2">
@@ -94,7 +131,7 @@ const Hero = () => {
           <div className="bg-white rounded-2xl shadow-md p-6">
 
             <h3 className="text-3xl font-bold text-green-600">
-              15+
+              {stats.ngos}
             </h3>
 
             <p className="text-gray-600 mt-2">
@@ -108,6 +145,7 @@ const Hero = () => {
       </div>
 
     </section>
+
   )
 }
 
