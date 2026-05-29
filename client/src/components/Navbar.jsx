@@ -1,107 +1,157 @@
-import { Link, useNavigate } from "react-router-dom"
+import { Link, useLocation } from "react-router-dom"
 import toast from "react-hot-toast"
 
 const Navbar = () => {
-  const navigate = useNavigate()
+
+  const location = useLocation()
 
   const userInfo = JSON.parse(
     localStorage.getItem("userInfo") || "null"
   )
 
-const logoutHandler = () => {
-  localStorage.removeItem("userInfo")
+  const logoutHandler = () => {
 
-  toast.success("Logged Out Successfully")
+    localStorage.removeItem("userInfo")
 
-  window.location.href = "/"
-}
+    toast.success(
+      "Logged Out Successfully"
+    )
+
+    window.location.href = "/"
+
+  }
+
+  const activeClass = (path) =>
+    location.pathname === path
+      ? "text-green-600 font-semibold"
+      : "text-gray-700 hover:text-green-600"
+
   return (
-    <nav className="w-full bg-white shadow-md px-8 py-4 flex justify-between items-center">
+    <nav className="sticky top-0 z-50 bg-white/90 backdrop-blur-md shadow-sm border-b">
 
-      <Link to="/">
-        <h1 className="text-2xl font-bold text-green-600">
-          MealBridge
-        </h1>
-      </Link>
+      <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
 
-      <div className="flex gap-4 items-center flex-wrap">
+        <Link to="/">
 
-        <Link
-          to="/"
-          className="hover:text-green-600"
-        >
-          Home
+          <div>
+
+            <h1 className="text-3xl font-bold text-green-600">
+              MealBridge
+            </h1>
+
+            <p className="text-xs text-gray-500">
+              AI-Powered Food Redistribution
+            </p>
+
+          </div>
+
         </Link>
 
-        {userInfo && (
+        <div className="flex items-center gap-6 flex-wrap">
+
           <Link
-            to="/dashboard"
-            className="hover:text-green-600"
+            to="/"
+            className={activeClass("/")}
           >
-            Dashboard
+            Home
           </Link>
-        )}
 
-        {(userInfo?.role === "donor" ||
-          userInfo?.role === "restaurant") && (
-          <Link
-            to="/create-donation"
-            className="hover:text-green-600"
-          >
-            Create Donation
-          </Link>
-        )}
+          {userInfo && (
 
-        {(userInfo?.role === "ngo" ||
-          userInfo?.role === "volunteer") && (
-          <Link
-            to="/donations"
-            className="hover:text-green-600"
-          >
-            Manage Donations
-          </Link>
-        )}
-
-        {userInfo && (
-          <Link
-            to="/ai-predict"
-            className="hover:text-green-600"
-          >
-            AI Prediction
-          </Link>
-        )}
-
-        {!userInfo ? (
-          <>
-            <Link to="/login">
-              <button className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition">
-                Login
-              </button>
-            </Link>
-
-            <Link to="/register">
-              <button className="border border-green-600 text-green-600 px-4 py-2 rounded-lg hover:bg-green-50 transition">
-                Register
-              </button>
-            </Link>
-          </>
-        ) : (
-          <>
-            <div className="hidden md:block text-sm text-gray-600">
-              Welcome,{" "}
-              <span className="font-semibold">
-                {userInfo.name}
-              </span>
-            </div>
-
-            <button
-              onClick={logoutHandler}
-              className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition"
+            <Link
+              to="/dashboard"
+              className={activeClass("/dashboard")}
             >
-              Logout
-            </button>
-          </>
-        )}
+              Dashboard
+            </Link>
+
+          )}
+
+          {(userInfo?.role === "donor" ||
+            userInfo?.role === "restaurant") && (
+
+            <Link
+              to="/create-donation"
+              className={activeClass("/create-donation")}
+            >
+              Create Donation
+            </Link>
+
+          )}
+
+          {(userInfo?.role === "ngo" ||
+            userInfo?.role === "volunteer") && (
+
+            <Link
+              to="/donations"
+              className={activeClass("/donations")}
+            >
+              Donations
+            </Link>
+
+          )}
+
+          {userInfo && (
+
+            <Link
+              to="/ai-predict"
+              className={activeClass("/ai-predict")}
+            >
+              AI Prediction
+            </Link>
+
+          )}
+
+          {!userInfo ? (
+
+            <>
+
+              <Link to="/login">
+
+                <button className="bg-green-600 text-white px-5 py-2 rounded-xl hover:bg-green-700 transition">
+                  Login
+                </button>
+
+              </Link>
+
+              <Link to="/register">
+
+                <button className="border border-green-600 text-green-600 px-5 py-2 rounded-xl hover:bg-green-50 transition">
+                  Register
+                </button>
+
+              </Link>
+
+            </>
+
+          ) : (
+
+            <>
+
+              <div className="hidden md:flex flex-col text-right">
+
+                <span className="font-semibold text-gray-800">
+                  {userInfo.name}
+                </span>
+
+                <span className="text-xs text-gray-500 capitalize">
+                  {userInfo.role}
+                </span>
+
+              </div>
+
+              <button
+                onClick={logoutHandler}
+                className="bg-red-500 text-white px-5 py-2 rounded-xl hover:bg-red-600 transition"
+              >
+                Logout
+              </button>
+
+            </>
+
+          )}
+
+        </div>
 
       </div>
 
