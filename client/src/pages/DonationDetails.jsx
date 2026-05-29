@@ -37,6 +37,7 @@ const DonationDetails = () => {
         setLoading(false)
 
       }
+
     }
 
     fetchDonation()
@@ -46,7 +47,9 @@ const DonationDetails = () => {
   if (loading) {
     return (
       <div className="min-h-screen flex justify-center items-center">
-        Loading...
+        <h1 className="text-3xl font-bold text-green-600">
+          Loading Donation...
+        </h1>
       </div>
     )
   }
@@ -54,115 +57,259 @@ const DonationDetails = () => {
   if (!donation) {
     return (
       <div className="min-h-screen flex justify-center items-center">
-        Donation Not Found
+        <h1 className="text-3xl font-bold text-red-500">
+          Donation Not Found
+        </h1>
       </div>
     )
   }
 
+  const timeline = [
+    {
+      label: "Donation Created",
+      completed: true,
+    },
+    {
+      label: "NGO Accepted",
+      completed:
+        !!donation.acceptedBy,
+    },
+    {
+      label: "Volunteer Assigned",
+      completed:
+        !!donation.assignedVolunteer,
+    },
+    {
+      label: "Picked Up",
+      completed:
+        !!donation.pickedUpAt,
+    },
+    {
+      label: "Delivered",
+      completed:
+        !!donation.deliveredAt,
+    },
+  ]
+
   return (
     <MainLayout>
 
-      <div className="min-h-screen bg-gray-100 p-10">
+      <div className="min-h-screen bg-gray-100 p-6 md:p-10">
 
-        <div className="bg-white rounded-2xl shadow-md p-8">
+        <div className="bg-white rounded-3xl shadow-md p-8">
 
-          <h1 className="text-4xl font-bold text-green-600">
-            {donation.foodType}
-          </h1>
+          <div className="flex flex-wrap justify-between gap-4">
 
-          <div className="mt-6 space-y-3">
+            <div>
 
-            <p>
-              Quantity:
-              {" "}
-              {donation.quantity}
-            </p>
+              <h1 className="text-4xl font-bold text-green-600">
+                {donation.foodType}
+              </h1>
 
-            <p>
-              Pickup Location:
-              {" "}
-              {donation.pickupLocation}
-            </p>
+              <p className="text-gray-500 mt-2">
+                Donation Tracking Details
+              </p>
 
-            <p>
-              Priority:
-              {" "}
-              {donation.priority}
-            </p>
+            </div>
 
-            <p>
-              Status:
-              {" "}
-              {donation.status}
-            </p>
+            <div>
+
+              <span
+                className={
+                  donation.priority === "High"
+                    ? "bg-red-100 text-red-700 px-4 py-2 rounded-full font-semibold"
+                    : donation.priority === "Medium"
+                    ? "bg-yellow-100 text-yellow-700 px-4 py-2 rounded-full font-semibold"
+                    : "bg-green-100 text-green-700 px-4 py-2 rounded-full font-semibold"
+                }
+              >
+                {donation.priority} Priority
+              </span>
+
+            </div>
 
           </div>
 
         </div>
 
-        <div className="bg-white rounded-2xl shadow-md p-8 mt-8">
+        <div className="grid lg:grid-cols-2 gap-8 mt-8">
 
-          <h2 className="text-2xl font-bold mb-6">
-            Delivery Timeline
-          </h2>
+          <div className="bg-white rounded-3xl shadow-md p-8">
 
-          <ul className="space-y-3">
+            <h2 className="text-2xl font-bold mb-6">
+              Donation Information
+            </h2>
 
-            <li>
-              ✅ Donation Created
-            </li>
+            <div className="space-y-4">
 
-            {donation.acceptedBy && (
-              <li>
-                ✅ NGO Accepted
-              </li>
-            )}
+              <p>
+                <strong>Quantity:</strong>{" "}
+                {donation.quantity}
+              </p>
 
-            {donation.assignedVolunteer && (
-              <li>
-                ✅ Volunteer Assigned
-              </li>
-            )}
+              <p>
+                <strong>Pickup Location:</strong>{" "}
+                {donation.pickupLocation}
+              </p>
 
-            {donation.pickedUpAt && (
-              <li>
-                ✅ Picked Up
-              </li>
-            )}
+              <p>
+                <strong>Status:</strong>{" "}
+                {donation.status}
+              </p>
 
-            {donation.deliveredAt && (
-              <li>
-                ✅ Delivered
-              </li>
-            )}
+              <p>
+                <strong>Expiry Hours:</strong>{" "}
+                {donation.expiryHours}
+              </p>
 
-          </ul>
+            </div>
+
+          </div>
+
+          <div className="bg-white rounded-3xl shadow-md p-8">
+
+            <h2 className="text-2xl font-bold mb-6">
+              Contact Information
+            </h2>
+
+            <div className="space-y-4">
+
+              <p>
+                <strong>Phone:</strong>{" "}
+                {donation.donorPhone ||
+                  "Not Available"}
+              </p>
+
+              <p>
+                <strong>Address:</strong>{" "}
+                {donation.donorAddress ||
+                  "Not Available"}
+              </p>
+
+              <p>
+                <strong>Instructions:</strong>{" "}
+                {donation.deliveryNotes ||
+                  "No Instructions"}
+              </p>
+
+            </div>
+
+          </div>
 
         </div>
 
-        <div className="bg-white rounded-2xl shadow-md p-8 mt-8">
+        <div className="bg-white rounded-3xl shadow-md p-8 mt-8">
 
-          <h2 className="text-2xl font-bold mb-6">
-            Contact Information
+          <h2 className="text-3xl font-bold mb-8">
+            Delivery Progress
           </h2>
 
-          <p>
-            Phone:
-            {" "}
-            {donation.donorPhone}
-          </p>
+          <div className="space-y-5">
 
-          <p>
-            Address:
-            {" "}
-            {donation.donorAddress}
-          </p>
+            {timeline.map(
+              (step, index) => (
 
-          <p>
-            Notes:
-            {" "}
-            {donation.deliveryNotes}
-          </p>
+                <div
+                  key={index}
+                  className="flex items-center gap-4"
+                >
+
+                  <div
+                    className={
+                      step.completed
+                        ? "w-10 h-10 rounded-full bg-green-500 text-white flex items-center justify-center"
+                        : "w-10 h-10 rounded-full bg-gray-300 text-white flex items-center justify-center"
+                    }
+                  >
+                    {step.completed
+                      ? "✓"
+                      : index + 1}
+                  </div>
+
+                  <p
+                    className={
+                      step.completed
+                        ? "font-semibold text-green-600"
+                        : "text-gray-500"
+                    }
+                  >
+                    {step.label}
+                  </p>
+
+                </div>
+
+              )
+            )}
+
+          </div>
+
+        </div>
+
+        <div className="grid lg:grid-cols-2 gap-8 mt-8">
+
+          <div className="bg-white rounded-3xl shadow-md p-8">
+
+            <h2 className="text-2xl font-bold mb-6">
+              NGO Information
+            </h2>
+
+            {donation.acceptedBy ? (
+
+              <div className="space-y-3">
+
+                <p>
+                  <strong>Name:</strong>{" "}
+                  {donation.acceptedBy.name}
+                </p>
+
+                <p>
+                  <strong>Email:</strong>{" "}
+                  {donation.acceptedBy.email}
+                </p>
+
+              </div>
+
+            ) : (
+
+              <p className="text-gray-500">
+                No NGO has accepted this donation yet.
+              </p>
+
+            )}
+
+          </div>
+
+          <div className="bg-white rounded-3xl shadow-md p-8">
+
+            <h2 className="text-2xl font-bold mb-6">
+              Volunteer Information
+            </h2>
+
+            {donation.assignedVolunteer ? (
+
+              <div className="space-y-3">
+
+                <p>
+                  <strong>Name:</strong>{" "}
+                  {donation.assignedVolunteer.name}
+                </p>
+
+                <p>
+                  <strong>Email:</strong>{" "}
+                  {donation.assignedVolunteer.email}
+                </p>
+
+              </div>
+
+            ) : (
+
+              <p className="text-gray-500">
+                No volunteer assigned yet.
+              </p>
+
+            )}
+
+          </div>
 
         </div>
 
