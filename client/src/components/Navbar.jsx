@@ -8,14 +8,13 @@ const Navbar = () => {
     localStorage.getItem("userInfo") || "null"
   )
 
-  const logoutHandler = () => {
-    localStorage.removeItem("userInfo")
+const logoutHandler = () => {
+  localStorage.removeItem("userInfo")
 
-    toast.success("Logged Out Successfully")
+  toast.success("Logged Out Successfully")
 
-    navigate("/login")
-  }
-
+  window.location.href = "/"
+}
   return (
     <nav className="w-full bg-white shadow-md px-8 py-4 flex justify-between items-center">
 

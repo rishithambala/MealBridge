@@ -1,6 +1,9 @@
 import { useState, useEffect } from "react"
 import axios from "axios"
-import { useNavigate } from "react-router-dom"
+import {
+  useNavigate,
+  Link,
+} from "react-router-dom"
 import toast from "react-hot-toast"
 
 import API_URL from "../config/api"
@@ -9,8 +12,10 @@ const Login = () => {
   const navigate = useNavigate()
 
   const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [loading, setLoading] = useState(false)
+  const [password, setPassword] =
+    useState("")
+  const [loading, setLoading] =
+    useState(false)
 
   useEffect(() => {
     const userInfo =
@@ -43,22 +48,29 @@ const Login = () => {
       toast.success("Welcome back!")
 
       navigate("/dashboard")
+
     } catch (error) {
+
       toast.error(
         error?.response?.data?.message ||
-          "Login Failed"
+        "Login Failed"
       )
+
     } finally {
+
       setLoading(false)
+
     }
   }
 
   return (
     <div className="min-h-screen flex justify-center items-center bg-gray-100">
+
       <form
         onSubmit={submitHandler}
         className="bg-white p-8 rounded-2xl shadow-md w-[400px]"
       >
+
         <h2 className="text-3xl font-bold text-center text-green-600 mb-6">
           Login
         </h2>
@@ -86,13 +98,32 @@ const Login = () => {
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-green-600 text-white py-3 rounded-lg"
+          className="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition"
         >
           {loading
             ? "Logging In..."
             : "Login"}
         </button>
+
+        <div className="text-center mt-4">
+
+          <p className="text-gray-600">
+
+            First time user?{" "}
+
+            <Link
+              to="/register"
+              className="text-green-600 font-semibold hover:underline"
+            >
+              Register here
+            </Link>
+
+          </p>
+
+        </div>
+
       </form>
+
     </div>
   )
 }
