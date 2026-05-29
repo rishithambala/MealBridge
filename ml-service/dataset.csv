@@ -1,0 +1,11 @@
+meals_required,people_served,priority
+50,100,Low
+100,200,Low
+150,300,Medium
+200,400,Medium
+300,600,High
+400,800,High
+500,1000,High
+120,250,Medium
+80,150,Low
+350,700,High
